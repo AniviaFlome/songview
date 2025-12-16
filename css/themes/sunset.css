@@ -1,0 +1,24 @@
+/* Sunset Theme */
+[data-theme="sunset"] {
+    --bg-primary: #1a0505;
+    --bg-secondary: #2a0a0a;
+    --bg-tertiary: #3a1010;
+    --bg-elevated: #451515;
+    --bg-hover: #552020;
+
+    --accent-primary: #e17055;
+    --accent-secondary: #fab1a0;
+    --accent-gradient: linear-gradient(135deg, #e17055, #fab1a0);
+}
+
+[data-preview="sunset"] {
+    background: #1a0505;
+}
+
+[data-preview="sunset"] .theme-preview-header {
+    background: #3a1010;
+}
+
+[data-preview="sunset"] .theme-preview-body {
+    background: #451515;
+}

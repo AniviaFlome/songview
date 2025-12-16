@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Song View - Your Spotify Backup Viewer</title>
+    <meta name="description"
+        content="A beautiful viewer for Spotify playlist exports. View and explore your exported CSV files with style.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="app">
+        <!-- Animated background -->
+        <div class="bg-gradient"></div>
+        <div class="bg-particles" id="particles"></div>
+
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <a href="javascript:window.location.reload()" class="logo-link">
+                    <div class="logo-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 18V5l12-2v13" />
+                            <circle cx="6" cy="18" r="3" />
+                            <circle cx="18" cy="16" r="3" />
+                        </svg>
+                    </div>
+                </a>
+                <a href="javascript:window.location.reload()" class="logo-link">
+                    <span class="logo-text">Song View</span>
+                </a>
+            </div>
+            <nav class="nav">
+                <button class="nav-btn" id="settingsBtn" title="Settings">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path
+                            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                        </path>
+                    </svg>
+                </button>
+
+            </nav>
+        </header>
+
+        <!-- Main content -->
+        <main class="main">
+            <!-- Upload section -->
+            <section class="upload-section" id="uploadSection">
+                <div class="upload-container">
+                    <div class="upload-hero">
+                        <h1 class="hero-title">
+                            <span class="gradient-text">Visualize Your</span>
+                            <br>Music Library
+                        </h1>
+                        <p class="hero-subtitle">
+                            Drop your CSV file from Exportify to explore your tracks with a premium interface
+                        </p>
+                    </div>
+
+                    <div class="dropzone" id="dropzone">
+                        <div class="dropzone-content">
+                            <div class="dropzone-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                    <polyline points="17 8 12 3 7 8" />
+                                    <line x1="12" y1="3" x2="12" y2="15" />
+                                </svg>
+                            </div>
+                            <p class="dropzone-text">Drag and drop your CSV file here</p>
+                            <p class="dropzone-subtext">or</p>
+                            <label class="upload-btn">
+                                <input type="file" accept=".csv" id="fileInput" hidden>
+                                <span>Browse Files</span>
+                            </label>
+                        </div>
+                        <div class="dropzone-hover">
+                            <div class="dropzone-hover-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M9 12l2 2 4-4" />
+                                    <circle cx="12" cy="12" r="10" />
+                                </svg>
+                            </div>
+                            <p>Release to upload</p>
+                        </div>
+                    </div>
+
+
+                </div>
+            </section>
+
+            <!-- Viewer section -->
+            <section class="viewer-section hidden" id="viewerSection">
+                <!-- Stats bar -->
+                <div class="stats-bar">
+                    <div class="stat-card">
+                        <div class="stat-icon tracks">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 18V5l12-2v13" />
+                                <circle cx="6" cy="18" r="3" />
+                                <circle cx="18" cy="16" r="3" />
+                            </svg>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="totalTracks">0</span>
+                            <span class="stat-label">Tracks</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon artists">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                <circle cx="9" cy="7" r="4" />
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                            </svg>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="totalArtists">0</span>
+                            <span class="stat-label">Artists</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon albums">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                                <circle cx="12" cy="12" r="5" />
+                                <circle cx="12" cy="12" r="1" />
+                            </svg>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="totalAlbums">0</span>
+                            <span class="stat-label">Albums</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon duration">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <polyline points="12 6 12 12 16 14" />
+                            </svg>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="totalDuration">0:00</span>
+                            <span class="stat-label">Total Time</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Toolbar -->
+                <div class="toolbar">
+                    <div class="search-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8" />
+                            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                        </svg>
+                        <input type="text" placeholder="Search tracks, artists, or albums..." id="searchInput">
+                    </div>
+                    <select class="sort-dropdown" id="sortDropdown">
+                        <option value="">Sort by...</option>
+                        <option value="Popularity">Popularity</option>
+                        <option value="Track Duration (ms)">Duration</option>
+                        <option value="Added At">Recently Added</option>
+                        <option value="Album Name">Album</option>
+                        <option value="Track Name">Track Name</option>
+                    </select>
+                    <div class="view-toggle">
+                        <button class="view-btn active" data-view="table" title="Table view">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="3" y1="6" x2="21" y2="6" />
+                                <line x1="3" y1="12" x2="21" y2="12" />
+                                <line x1="3" y1="18" x2="21" y2="18" />
+                            </svg>
+                        </button>
+                        <button class="view-btn" data-view="grid" title="Grid view">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="7" height="7" />
+                                <rect x="14" y="3" width="7" height="7" />
+                                <rect x="3" y="14" width="7" height="7" />
+                                <rect x="14" y="14" width="7" height="7" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Table view -->
+                <div class="table-container" id="tableView">
+                    <table class="data-table">
+                        <thead>
+                            <tr id="tableHeader"></tr>
+                        </thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
+
+                <!-- Grid view -->
+                <div class="grid-container hidden" id="gridView"></div>
+
+                <!-- Pagination -->
+                <div class="pagination" id="pagination">
+                    <button class="page-btn" id="prevPage" disabled>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15 18 9 12 15 6" />
+                        </svg>
+                    </button>
+                    <span class="page-info">Page <span id="currentPage">1</span> of <span
+                            id="totalPages">1</span></span>
+                    <button class="page-btn" id="nextPage">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="9 18 15 12 9 6" />
+                        </svg>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Settings section -->
+            <section class="settings-section hidden" id="settingsSection">
+                <button class="back-btn" id="settingsBackBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    <span>Back</span>
+                </button>
+
+                <div class="settings-header">
+                    <h1 class="settings-title">Settings</h1>
+                    <p class="settings-description">Customize your experience</p>
+                </div>
+
+                <div class="settings-card">
+                    <h3 class="settings-card-title">View Options</h3>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <span class="setting-name">Infinite Scroll</span>
+                            <span class="setting-description">Load more items automatically as you scroll instead of
+                                using pages</span>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="infiniteScrollToggle">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <h3 class="settings-card-title">Appearance</h3>
+                    <p style="margin-bottom: 16px; color: var(--text-muted); font-size: 0.9rem;">
+                        Choose a theme that suits your style. Selected theme is saved automatically.
+                    </p>
+                    <div class="theme-grid" id="themeGrid">
+                        <!-- Generated by JS -->
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Track detail modal -->
+        <div class="modal hidden" id="trackModal">
+            <div class="modal-backdrop" id="modalBackdrop"></div>
+            <div class="modal-content">
+                <button class="modal-close" id="modalClose">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+                <div class="modal-body" id="modalBody"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,28 @@
+/* Rosé Pine Theme */
+[data-theme="rose-pine"] {
+    --bg-primary: #191724;
+    --bg-secondary: #1f1d2e;
+    --bg-tertiary: #26233a;
+    --bg-elevated: #1f1d2e;
+    --bg-hover: #403d52;
+
+    --text-primary: #e0def4;
+    --text-secondary: #9ccfd8;
+    --text-muted: #6e6a86;
+
+    --accent-primary: #eb6f92;
+    --accent-secondary: #c4a7e7;
+    --accent-gradient: linear-gradient(135deg, #eb6f92, #c4a7e7);
+}
+
+[data-preview="rose-pine"] {
+    background: #191724;
+}
+
+[data-preview="rose-pine"] .theme-preview-header {
+    background: #26233a;
+}
+
+[data-preview="rose-pine"] .theme-preview-body {
+    background: #1f1d2e;
+}

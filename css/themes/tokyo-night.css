@@ -1,0 +1,28 @@
+/* Tokyo Night Theme */
+[data-theme="tokyo-night"] {
+    --bg-primary: #1a1b26;
+    --bg-secondary: #24283b;
+    --bg-tertiary: #414868;
+    --bg-elevated: #24283b;
+    --bg-hover: #414868;
+
+    --text-primary: #c0caf5;
+    --text-secondary: #a9b1d6;
+    --text-muted: #565f89;
+
+    --accent-primary: #7aa2f7;
+    --accent-secondary: #bb9af7;
+    --accent-gradient: linear-gradient(135deg, #7aa2f7, #bb9af7);
+}
+
+[data-preview="tokyo-night"] {
+    background: #1a1b26;
+}
+
+[data-preview="tokyo-night"] .theme-preview-header {
+    background: #24283b;
+}
+
+[data-preview="tokyo-night"] .theme-preview-body {
+    background: #414868;
+}

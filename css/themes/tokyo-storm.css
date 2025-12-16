@@ -1,0 +1,28 @@
+/* Tokyo Night Storm Theme */
+[data-theme="tokyo-storm"] {
+    --bg-primary: #24283b;
+    --bg-secondary: #1f2335;
+    --bg-tertiary: #414868;
+    --bg-elevated: #1f2335;
+    --bg-hover: #414868;
+
+    --text-primary: #c0caf5;
+    --text-secondary: #a9b1d6;
+    --text-muted: #565f89;
+
+    --accent-primary: #7aa2f7;
+    --accent-secondary: #2ac3de;
+    --accent-gradient: linear-gradient(135deg, #7aa2f7, #2ac3de);
+}
+
+[data-preview="tokyo-storm"] {
+    background: #24283b;
+}
+
+[data-preview="tokyo-storm"] .theme-preview-header {
+    background: #1f2335;
+}
+
+[data-preview="tokyo-storm"] .theme-preview-body {
+    background: #414868;
+}

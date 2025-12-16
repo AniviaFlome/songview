@@ -1,0 +1,24 @@
+/* Midnight Theme */
+[data-theme="midnight"] {
+    --bg-primary: #050520;
+    --bg-secondary: #0a0a2a;
+    --bg-tertiary: #101035;
+    --bg-elevated: #151540;
+    --bg-hover: #202050;
+
+    --accent-primary: #6c5ce7;
+    --accent-secondary: #8273ea;
+    --accent-gradient: linear-gradient(135deg, #6c5ce7, #a29bfe);
+}
+
+[data-preview="midnight"] {
+    background: #050520;
+}
+
+[data-preview="midnight"] .theme-preview-header {
+    background: #101035;
+}
+
+[data-preview="midnight"] .theme-preview-body {
+    background: #151540;
+}

@@ -1,0 +1,42 @@
+/* Catppuccin Mocha Theme (Mauve/Darker) */
+[data-theme="catppuccin"] {
+    --bg-primary: #11111b;
+    /* Crust */
+    --bg-secondary: #181825;
+    /* Mantle */
+    --bg-tertiary: #1e1e2e;
+    /* Base */
+    --bg-elevated: #313244;
+    /* Surface0 */
+    --bg-hover: #45475a;
+    /* Surface1 */
+
+    --text-primary: #cdd6f4;
+    /* Text */
+    --text-secondary: #a6adc8;
+    /* Subtext0 */
+    --text-muted: #6c7086;
+    /* Overlay0 */
+
+    --accent-primary: #cba6f7;
+    /* Mauve */
+    --accent-secondary: #f5c2e7;
+    /* Pink */
+    --accent-gradient: linear-gradient(135deg, #cba6f7, #f5c2e7);
+
+    --glass-bg: rgba(30, 30, 46, 0.7);
+    --glass-border: rgba(205, 214, 244, 0.08);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+[data-preview="catppuccin"] {
+    background: #11111b;
+}
+
+[data-preview="catppuccin"] .theme-preview-header {
+    background: #1e1e2e;
+}
+
+[data-preview="catppuccin"] .theme-preview-body {
+    background: #cba6f7;
+}

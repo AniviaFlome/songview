@@ -1,0 +1,28 @@
+/* Light Theme */
+[data-theme="light"] {
+    --bg-primary: #f8f9fc;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #f0f2f5;
+    --bg-elevated: #ffffff;
+    --bg-hover: #e8eaef;
+
+    --text-primary: #1a1a2e;
+    --text-secondary: #5a5a70;
+    --text-muted: #9090a0;
+
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(0, 0, 0, 0.08);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+[data-preview="light"] {
+    background: #f8f9fc;
+}
+
+[data-preview="light"] .theme-preview-header {
+    background: #ffffff;
+}
+
+[data-preview="light"] .theme-preview-body {
+    background: #e8eaef;
+}
