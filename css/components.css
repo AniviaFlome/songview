@@ -318,6 +318,7 @@
     border-radius: inherit;
     cursor: pointer;
     z-index: 10;
+    opacity: 1;
 }
 
 .progress-ring {
@@ -398,6 +399,28 @@
 
 .track-art-container.playing .play-overlay {
     opacity: 1;
+}
+
+/* Hide play button when audio is playing in grid view */
+.grid-item-image.playing .grid-item-play {
+    opacity: 0 !important;
+    pointer-events: none;
+    transition: none;
+}
+
+/* Bigger progress ring for grid view */
+.grid-item-image .audio-progress-overlay {
+    border-radius: 0;
+}
+
+.grid-item-image .progress-ring {
+    width: 64px;
+    height: 64px;
+}
+
+.grid-item-image .pause-icon {
+    width: 32px;
+    height: 32px;
 }
 
 /* Action Button */

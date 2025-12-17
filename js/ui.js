@@ -94,7 +94,17 @@ function setupEventDelegation() {
 
     // Grid Delegation
     elements.gridView.addEventListener('click', (e) => {
+        const playButton = e.target.closest('.grid-item-play');
         const item = e.target.closest('.grid-item');
+
+        if (playButton && item) {
+            e.stopPropagation();
+            const previewUrl = item.dataset.preview;
+            const imageContainer = item.querySelector('.grid-item-image');
+            playPreview(previewUrl, imageContainer);
+            return;
+        }
+
         if (item) {
             openModal(parseInt(item.dataset.index));
         }
@@ -267,6 +277,7 @@ export function renderGrid(append = false) {
     const trackKey = findHeader(['Track Name', 'Name', 'Track', 'title']);
     const artistKey = findHeader(['Artist Name(s)', 'Artist Name', 'Artists', 'artist']);
     const imageKey = findHeader(['Album Image URL', 'Image URL', 'image']);
+    const previewKey = findHeader(['Track Preview URL', 'Preview URL', 'preview_url', 'Preview']);
 
     const placeholderSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>`;
 
@@ -274,9 +285,10 @@ export function renderGrid(append = false) {
         const imageSrc = imageKey && row[imageKey] ? row[imageKey] : null;
         const trackName = trackKey ? row[trackKey] : 'Unknown Track';
         const artistName = artistKey ? row[artistKey] : 'Unknown Artist';
+        const previewUrl = previewKey ? row[previewKey] : null;
 
         return `
-            <div class="grid-item" data-index="${start + index}">
+            <div class="grid-item" data-index="${start + index}" data-preview="${previewUrl || ''}">
                 <div class="grid-item-image">
                     ${imageSrc
                 ? `<img src="${imageSrc}" alt="${escapeHtml(trackName)}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
@@ -330,6 +342,9 @@ export function changePage(direction) {
 
 export function switchView(view) {
     state.currentView = view;
+
+    // Stop any playing audio when switching views
+    stopPreview();
 
     document.querySelectorAll('.view-btn').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.view === view);
@@ -432,8 +447,21 @@ export function openModal(index) {
         }
                 </h2>
                 <p class="modal-subtitle">
-                    ${track['Artist URI(s)']
-            ? `<a href="https://open.spotify.com/artist/${track['Artist URI(s)'].split(':')[2]}" target="_blank" class="spotify-redirect-link">${escapeHtml(artistName)}</a>`
+                    ${track['Artist URI(s)'] && track[artistKey]
+            ? (() => {
+                // Handle multiple artists - each with their own link
+                const artistNames = track[artistKey].split(',').map(a => a.trim());
+                const artistUris = track['Artist URI(s)'].split(',').map(u => u.trim());
+
+                return artistNames.map((name, i) => {
+                    const uri = artistUris[i];
+                    if (uri) {
+                        const artistId = uri.split(':')[2];
+                        return `<a href="https://open.spotify.com/artist/${artistId}" target="_blank" class="spotify-redirect-link">${escapeHtml(name)}</a>`;
+                    }
+                    return escapeHtml(name);
+                }).join(', ');
+            })()
             : escapeHtml(artistName)
         }
                 </p>
@@ -646,11 +674,31 @@ export function showSettings() {
 }
 
 export function hideSettings() {
-    elements.settingsSection.classList.add('hidden');
-    if (state.data.length > 0) {
-        elements.viewerSection.classList.remove('hidden');
+    // Add closing animation
+    elements.settingsSection.classList.add('closing');
+
+    // Wait for animation to complete before hiding
+    setTimeout(() => {
+        elements.settingsSection.classList.remove('closing');
+        elements.settingsSection.classList.add('hidden');
+        if (state.data.length > 0) {
+            elements.viewerSection.classList.remove('hidden');
+        } else {
+            elements.uploadSection.classList.remove('hidden');
+        }
+    }, 200); // Match animation duration
+}
+
+export function toggleSettings() {
+    // Don't toggle if closing animation is in progress
+    if (elements.settingsSection.classList.contains('closing')) {
+        return;
+    }
+
+    if (elements.settingsSection.classList.contains('hidden')) {
+        showSettings();
     } else {
-        elements.uploadSection.classList.remove('hidden');
+        hideSettings();
     }
 }
 

@@ -153,7 +153,7 @@
 
 /* ===== Viewer Section ===== */
 .viewer-section {
-    animation: fadeIn 0.5s ease;
+    animation: fadeIn 0.25s ease;
 }
 
 @keyframes fadeIn {
@@ -186,11 +186,6 @@
     border-radius: var(--border-radius-lg);
     backdrop-filter: blur(10px);
     transition: all var(--transition-normal);
-}
-
-.stat-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--glass-shadow);
 }
 
 .stat-icon {
@@ -397,8 +392,6 @@
 }
 
 .grid-item:hover {
-    transform: translateY(-6px);
-    box-shadow: var(--glass-shadow);
     border-color: var(--accent-primary);
 }
 
@@ -451,6 +444,11 @@
     opacity: 1;
 }
 
+/* Don't show play button on hover when already playing */
+.grid-item:hover .grid-item-image.playing .grid-item-play {
+    opacity: 0;
+}
+
 .grid-item-play svg {
     width: 48px;
     height: 48px;
@@ -481,7 +479,23 @@
 .settings-section {
     max-width: 800px;
     margin: 0 auto;
-    animation: fadeIn 0.5s ease;
+    animation: fadeIn 0.2s ease;
+}
+
+.settings-section.closing {
+    animation: fadeOut 0.2s ease-out forwards;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
 }
 
 .settings-header {

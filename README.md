@@ -2,17 +2,6 @@
 
 A beautiful, modern web-based viewer for Spotify playlist exports. Designed to work with CSV files exported from tools like [Exportify](https://exportify.app/).
 
-## Features
-
-- **Beautiful Visualizer**: View your music library in a sleek, modern interface.
-- **Data Analysis**: See stats about your library including total tracks, artists, albums, and duration.
-- **Search & Sort**: Quickly find tracks and sort by popularity, duration, added date, and more.
-- **Table & Grid Views**: Switch between a detailed table view and a visual grid view.
-- **Audio Previews**: Play 30-second previews of tracks (where available) with a visual progress indicator.
-- **Infinite Scroll**: Smoothly browse large libraries without pagination.
-- **Theme Support**: Customize the look and feel with built-in themes.
-- **Zero Upload**: Your data stays local. The CSV is parsed directly in your browser.
-
 ## Usage
 
 1.  Export your Spotify playlist to CSV using a tool like [Exportify](https://exportify.app/).
@@ -32,15 +21,15 @@ This project uses vanilla HTML, CSS, and JavaScript. No build step is required.
 - `css/`: Stylesheets (variables, layout, components, themes).
 
 
-## Deployment (Cloudflare Pages + D1)
+## Deployment
 
-This project supports sharing playlist functionality using Cloudflare Pages Functions and D1 (Serverless SQL Database).
+This project supports sharing playlist functionality using Cloudflare Pages and D1.
 
 ### Prerequisites
 
 - Cloudflare Account
 - Node.js installed locally
-- Wrangler CLI (`npm install -g wrangler`)
+- Wrangler CLI
 
 ### Setup Instructions
 

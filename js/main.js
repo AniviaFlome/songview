@@ -5,7 +5,7 @@ import { parseCSV, handleSearch, handleSort } from './data.js';
 import { debounce } from './utils.js';
 import {
     showViewer, resetApp, loadSampleData, changePage, switchView, closeModal,
-    showSettings, hideSettings, playPreview, renderData, toggleInfiniteScroll,
+    showSettings, hideSettings, toggleSettings, playPreview, renderData, toggleInfiniteScroll,
     showShareModal, closeShareModal
 } from './ui.js';
 import { shareData, getSharedData } from './api.js';
@@ -21,6 +21,10 @@ export async function init() {
         state.currentPage = 1; // Reset to first page on sort
         renderData();
         if (window.updateURL) window.updateURL();
+        // Update sort dropdown to reflect current sort column
+        if (elements.sortDropdown && state.sortColumn) {
+            elements.sortDropdown.value = state.sortColumn;
+        }
     });
 
     // Check for shared data ID
@@ -102,7 +106,7 @@ function setupEventListeners() {
 
     // Settings
     if (elements.settingsBtn) {
-        elements.settingsBtn.addEventListener('click', showSettings);
+        elements.settingsBtn.addEventListener('click', toggleSettings);
     }
     if (elements.settingsBackBtn) {
         elements.settingsBackBtn.addEventListener('click', hideSettings);
