@@ -16,6 +16,7 @@
 
     --glass-bg: rgba(253, 244, 193, 0.7);
     --glass-border: rgba(60, 56, 54, 0.08);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
 [data-preview="gruvbox-light"] {

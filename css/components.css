@@ -379,7 +379,7 @@
     align-items: center;
     justify-content: center;
     opacity: 0;
-    transition: opacity var(--transition-fast);
+    pointer-events: none;
 }
 
 .play-overlay svg {
@@ -390,6 +390,7 @@
 
 .track-art-container:hover .play-overlay {
     opacity: 1;
+    pointer-events: auto;
 }
 
 .track-art-container:hover .track-art,
@@ -400,6 +401,13 @@
 .track-art-container.playing .play-overlay {
     opacity: 0 !important;
     pointer-events: none;
+    transition: none;
+}
+
+/* Block hover effect right after stopping to prevent flicker */
+.track-art-container.just-stopped .play-overlay {
+    opacity: 0 !important;
+    transition: none;
 }
 
 /* Bigger version for grid view */

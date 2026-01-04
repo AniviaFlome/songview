@@ -13,6 +13,10 @@
     --accent-primary: #7aa2f7;
     --accent-secondary: #bb9af7;
     --accent-gradient: linear-gradient(135deg, #7aa2f7, #bb9af7);
+
+    --glass-bg: rgba(36, 40, 59, 0.7);
+    --glass-border: rgba(192, 202, 245, 0.08);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
 [data-preview="tokyo-night"] {

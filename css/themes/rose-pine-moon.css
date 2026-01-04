@@ -1,0 +1,32 @@
+/* Rosé Pine Moon Theme */
+[data-theme="rose-pine-moon"] {
+    --bg-primary: #232136;
+    --bg-secondary: #2a273f;
+    --bg-tertiary: #393552;
+    --bg-elevated: #2a273f;
+    --bg-hover: #44415a;
+
+    --text-primary: #e0def4;
+    --text-secondary: #908caa;
+    --text-muted: #6e6a86;
+
+    --accent-primary: #ea9a97;
+    --accent-secondary: #c4a7e7;
+    --accent-gradient: linear-gradient(135deg, #ea9a97, #c4a7e7);
+
+    --glass-bg: rgba(57, 53, 82, 0.7);
+    --glass-border: rgba(224, 222, 244, 0.08);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+[data-preview="rose-pine-moon"] {
+    background: #232136;
+}
+
+[data-preview="rose-pine-moon"] .theme-preview-header {
+    background: #393552;
+}
+
+[data-preview="rose-pine-moon"] .theme-preview-body {
+    background: #ea9a97;
+}

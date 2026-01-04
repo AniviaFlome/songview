@@ -13,6 +13,10 @@
     --accent-primary: #eb6f92;
     --accent-secondary: #c4a7e7;
     --accent-gradient: linear-gradient(135deg, #eb6f92, #c4a7e7);
+
+    --glass-bg: rgba(38, 35, 58, 0.7);
+    --glass-border: rgba(224, 222, 244, 0.08);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
 [data-preview="rose-pine"] {

@@ -512,8 +512,9 @@ export function playPreview(url, element) {
     // Always show visual overlay on the element
     currentPlayingElement = element;
     if (element) {
+        // Create overlay FIRST, then add playing class to prevent flicker
+        createProgressOverlay(element, !url);
         element.classList.add('playing');
-        createProgressOverlay(element, !url); // Pass flag if no audio
     }
 
     // Only create audio if we have a URL
@@ -592,9 +593,21 @@ export function stopPreview() {
         progressInterval = null;
     }
     if (currentPlayingElement) {
-        currentPlayingElement.classList.remove('playing');
+        // Remove overlay FIRST, then remove playing class to prevent flicker
         const overlay = currentPlayingElement.querySelector('.audio-progress-overlay');
         if (overlay) overlay.remove();
+
+        // Add temporary class to block hover effect, then remove after a frame
+        currentPlayingElement.classList.add('just-stopped');
+        currentPlayingElement.classList.remove('playing');
+
+        const el = currentPlayingElement;
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                el.classList.remove('just-stopped');
+            });
+        });
+
         currentPlayingElement = null;
     }
 }

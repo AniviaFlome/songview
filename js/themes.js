@@ -1,16 +1,16 @@
 import { elements } from './dom.js';
 
 export const themes = [
-    { id: 'dark', name: 'Dark (Default)' },
+    { id: 'dark', name: 'Dark' },
     { id: 'light', name: 'Light' },
     // Alphabetical Order
     { id: 'catppuccin', name: 'Catppuccin Mocha' },
     { id: 'dracula', name: 'Dracula' },
-    { id: 'forest', name: 'Forest Green' },
     { id: 'gruvbox-dark', name: 'Gruvbox Dark' },
     { id: 'gruvbox-light', name: 'Gruvbox Light' },
     { id: 'midnight', name: 'Midnight Blue' },
     { id: 'rose-pine', name: 'Rosé Pine' },
+    { id: 'rose-pine-moon', name: 'Rosé Pine Moon' },
     { id: 'sunset', name: 'Sunset Red' },
     { id: 'tokyo-night', name: 'Tokyo Night' },
     { id: 'tokyo-storm', name: 'Tokyo Night Storm' }
@@ -22,17 +22,8 @@ export function loadTheme() {
 
     if (savedTheme) {
         setTheme(savedTheme);
-    } else {
-        // Check system preference
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            setTheme('dark');
-        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-            setTheme('light');
-        } else {
-            // If explicit preference not found, default to dark (safe fallback) or leave unset if you prefer
-            setTheme('dark');
-        }
     }
+    // If no saved theme, the browser will use prefers-color-scheme via CSS
 }
 
 export function setTheme(themeName) {

@@ -6,9 +6,17 @@
     --bg-elevated: #151540;
     --bg-hover: #202050;
 
+    --text-primary: #e8e8ff;
+    --text-secondary: #b0b0d0;
+    --text-muted: #6060a0;
+
     --accent-primary: #6c5ce7;
     --accent-secondary: #8273ea;
     --accent-gradient: linear-gradient(135deg, #6c5ce7, #a29bfe);
+
+    --glass-bg: rgba(16, 16, 53, 0.7);
+    --glass-border: rgba(232, 232, 255, 0.08);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
 [data-preview="midnight"] {
