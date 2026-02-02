@@ -1,7 +1,25 @@
 import { state, sampleData } from './state.js';
 import { elements } from './dom.js';
-import { escapeHtml, formatDuration, formatTrackDuration } from './utils.js';
+import { escapeHtml, formatDuration, formatTrackDuration, parseCSVLine } from './utils.js';
 import { findHeader, getDisplayHeaders, getDisplayName, handleSort } from './data.js';
+
+const PLACEHOLDER_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>`;
+
+function getTrackDisplayInfo(row) {
+    const trackKey = findHeader(['Track Name', 'Name', 'Track', 'title']);
+    const artistKey = findHeader(['Artist Name(s)', 'Artist Name', 'Artists', 'artist']);
+    const albumKey = findHeader(['Album Name', 'Album', 'album']);
+    const imageKey = findHeader(['Album Image URL', 'Image URL', 'image']);
+    const previewKey = findHeader(['Track Preview URL', 'Preview URL', 'preview_url', 'Preview']);
+
+    return {
+        trackName: trackKey ? row[trackKey] : 'Unknown Track',
+        artistName: artistKey ? row[artistKey] : 'Unknown Artist',
+        albumName: albumKey ? row[albumKey] : 'Unknown Album',
+        imageSrc: imageKey && row[imageKey] ? row[imageKey] : null,
+        previewUrl: previewKey ? row[previewKey] : null
+    };
+}
 
 export function showViewer() {
     elements.uploadSection.classList.add('hidden');
@@ -200,34 +218,28 @@ export function renderTable(append = false) {
     const start = (state.currentPage - 1) * state.itemsPerPage;
     const pageData = state.filteredData.slice(start, start + state.itemsPerPage);
 
-    const placeholderSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>`;
-    const placeholderHTML = `<div class="track-art-placeholder" style="background: var(--gradient-1)">${placeholderSvg}</div>`;
+    const placeholderHTML = `<div class="track-art-placeholder" style="background: var(--gradient-1)">${PLACEHOLDER_SVG}</div>`;
 
     // Render rows
     const trackKey = findHeader(['Track Name', 'Name', 'Track', 'title']);
     const artistKey = findHeader(['Artist Name(s)', 'Artist Name', 'Artists', 'artist']);
-    const imageKey = findHeader(['Album Image URL', 'Image URL', 'image']);
-    const previewKey = findHeader(['Track Preview URL', 'Preview URL', 'preview_url', 'Preview']);
 
     const rowsHTML = pageData.map((row, index) => {
+        const { trackName, artistName, imageSrc, previewUrl } = getTrackDisplayInfo(row);
+
         const cells = displayHeaders.map(header => {
             if (header === trackKey && trackKey) {
-                const imageSrc = imageKey && row[imageKey] ? row[imageKey] : null;
-                const artist = artistKey ? row[artistKey] : '';
-                const previewUrl = previewKey ? row[previewKey] : null;
                 const dataIndex = start + index;
-
-                // Image Error Handler: replace outerHTML with placeholder
-                const imgError = `this.parentElement.querySelector('.track-art-placeholder').classList.remove('hidden'); this.style.display='none';`;
+                const placeholder = `<div class="track-art-placeholder">${PLACEHOLDER_SVG}</div>`;
+                const artHtml = imageSrc
+                    ? `<img src="${imageSrc}" alt="" class="track-art" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                       <div class="track-art-placeholder" style="display:none; background: var(--gradient-2)">${PLACEHOLDER_SVG}</div>`
+                    : placeholder;
 
                 return `<td>
                     <div class="track-cell">
                         <div class="track-art-container" data-preview="${previewUrl || ''}" data-index="${dataIndex}">
-                            ${imageSrc
-                        ? `<img src="${imageSrc}" alt="" class="track-art" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-                           <div class="track-art-placeholder" style="display:none; background: var(--gradient-2)">${placeholderSvg}</div>`
-                        : `<div class="track-art-placeholder">${placeholderSvg}</div>`
-                    }
+                            ${artHtml}
                             <div class="play-overlay">
                                 <svg viewBox="0 0 24 24" fill="currentColor">
                                     <polygon points="5,3 19,12 5,21"/>
@@ -235,8 +247,8 @@ export function renderTable(append = false) {
                             </div>
                         </div>
                         <div class="track-info">
-                            <span class="track-name">${escapeHtml(row[header])}</span>
-                            <span class="track-artist">${escapeHtml(artist)}</span>
+                            <span class="track-name">${escapeHtml(trackName)}</span>
+                            <span class="track-artist">${escapeHtml(artistName)}</span>
                         </div>
                     </div>
                 </td>`;
@@ -273,27 +285,23 @@ export function renderGrid(append = false) {
     const start = (state.currentPage - 1) * state.itemsPerPage;
     const pageData = state.filteredData.slice(start, start + state.itemsPerPage);
 
-    const trackKey = findHeader(['Track Name', 'Name', 'Track', 'title']);
-    const artistKey = findHeader(['Artist Name(s)', 'Artist Name', 'Artists', 'artist']);
-    const imageKey = findHeader(['Album Image URL', 'Image URL', 'image']);
-    const previewKey = findHeader(['Track Preview URL', 'Preview URL', 'preview_url', 'Preview']);
 
-    const placeholderSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>`;
 
     const gridHTML = pageData.map((row, index) => {
-        const imageSrc = imageKey && row[imageKey] ? row[imageKey] : null;
-        const trackName = trackKey ? row[trackKey] : 'Unknown Track';
-        const artistName = artistKey ? row[artistKey] : 'Unknown Artist';
-        const previewUrl = previewKey ? row[previewKey] : null;
+        const { trackName, artistName, imageSrc, previewUrl } = getTrackDisplayInfo(row);
+
+        const placeholder = `<div class="track-art-placeholder">${PLACEHOLDER_SVG}</div>`;
+        const artHtml = imageSrc
+            ? `<img src="${imageSrc}" alt="${escapeHtml(trackName)}" class="track-art" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+               <div class="track-art-placeholder" style="display:none; background: var(--gradient-2)">${PLACEHOLDER_SVG}</div>`
+            : placeholder;
 
         return `
             <div class="grid-item" data-index="${start + index}">
                 <div class="track-art-container grid-art" data-preview="${previewUrl || ''}">
-                    ${imageSrc
-                ? `<img src="${imageSrc}" alt="${escapeHtml(trackName)}" class="track-art" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-                   <div class="track-art-placeholder" style="display:none; background: var(--gradient-2)">${placeholderSvg}</div>`
-                : `<div class="track-art-placeholder">${placeholderSvg}</div>`
-            }
+            <div class="grid-item" data-index="${start + index}">
+                <div class="track-art-container grid-art" data-preview="${previewUrl || ''}">
+                    ${artHtml}
                     <div class="play-overlay">
                         <svg viewBox="0 0 24 24" fill="currentColor">
                             <polygon points="5 3 19 12 5 21 5 3"/>
@@ -367,11 +375,7 @@ export function openModal(index) {
     const imageKey = findHeader(['Album Image URL', 'Image URL', 'image']);
     const previewKey = findHeader(['Track Preview URL', 'Preview URL', 'preview_url']);
 
-    const trackName = trackKey ? track[trackKey] : 'Unknown Track';
-    const artistName = artistKey ? track[artistKey] : 'Unknown Artist';
-    const albumName = albumKey ? track[albumKey] : 'Unknown Album';
-    const imageSrc = imageKey && track[imageKey] ? track[imageKey] : null;
-    const previewUrl = previewKey ? track[previewKey] : null;
+    const { trackName, artistName, albumName, imageSrc, previewUrl } = getTrackDisplayInfo(track);
 
     // Filter keys
     const excludeKeys = [
@@ -427,15 +431,15 @@ export function openModal(index) {
             `;
         }).join('');
 
-    const placeholderSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>`;
+
 
     elements.modalBody.innerHTML = `
         <div class="modal-header">
             ${imageSrc
             ? `<img src="${imageSrc}" alt="" class="modal-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-               <div class="modal-image-placeholder" style="display:none; background: var(--gradient-2)">${placeholderSvg}</div>`
+               <div class="modal-image-placeholder" style="display:none; background: var(--gradient-2)">${PLACEHOLDER_SVG}</div>`
             : `<div class="modal-image-placeholder">
-                    ${placeholderSvg}
+                    ${PLACEHOLDER_SVG}
                 </div>`
         }
             <div class="modal-title-section">
@@ -653,33 +657,7 @@ export async function loadSampleData() {
     }
 }
 
-// Simple CSV line parser
-function parseCSVLine(line) {
-    const result = [];
-    let current = '';
-    let inQuotes = false;
 
-    for (let i = 0; i < line.length; i++) {
-        const char = line[i];
-        const nextChar = line[i + 1];
-
-        if (char === '"') {
-            if (inQuotes && nextChar === '"') {
-                current += '"';
-                i++;
-            } else {
-                inQuotes = !inQuotes;
-            }
-        } else if (char === ',' && !inQuotes) {
-            result.push(current.trim());
-            current = '';
-        } else {
-            current += char;
-        }
-    }
-    result.push(current.trim());
-    return result;
-}
 
 // Settings Views
 export function showSettings() {

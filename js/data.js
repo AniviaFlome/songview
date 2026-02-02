@@ -1,5 +1,6 @@
 import { state } from './state.js';
 import { renderData, updateStats, showViewer } from './ui.js';
+import { parseCSVLine } from './utils.js';
 
 export function parseCSV(file) {
     const reader = new FileReader();
@@ -33,33 +34,7 @@ export function parseCSV(file) {
     reader.readAsText(file);
 }
 
-function parseCSVLine(line) {
-    const result = [];
-    let current = '';
-    let inQuotes = false;
 
-    for (let i = 0; i < line.length; i++) {
-        const char = line[i];
-        const nextChar = line[i + 1];
-
-        if (char === '"') {
-            if (inQuotes && nextChar === '"') {
-                current += '"';
-                i++;
-            } else {
-                inQuotes = !inQuotes;
-            }
-        } else if (char === ',' && !inQuotes) {
-            result.push(current.trim());
-            current = '';
-        } else {
-            current += char;
-        }
-    }
-    result.push(current.trim());
-
-    return result;
-}
 
 export function handleSearch(e) {
     state.searchQuery = e.target.value.toLowerCase();
