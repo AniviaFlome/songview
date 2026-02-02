@@ -1,9 +1,9 @@
 /* Gruvbox Light Theme */
 [data-theme="gruvbox-light"] {
-    --bg-primary: #fbf1c7;
+    --bg-primary: #f2e5bc;
     --bg-secondary: #ebdbb2;
     --bg-tertiary: #d5c4a1;
-    --bg-elevated: #ebdbb2;
+    --bg-elevated: #fbf1c7;
     --bg-hover: #bdae93;
 
     --text-primary: #3c3836;

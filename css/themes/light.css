@@ -1,6 +1,6 @@
 /* Light Theme */
 [data-theme="light"] {
-    --bg-primary: #f8f9fc;
+    --bg-primary: #eaebef;
     --bg-secondary: #ffffff;
     --bg-tertiary: #f0f2f5;
     --bg-elevated: #ffffff;
@@ -9,6 +9,10 @@
     --text-primary: #1a1a2e;
     --text-secondary: #5a5a70;
     --text-muted: #9090a0;
+
+    --accent-primary: #1db954;
+    --accent-secondary: #1ed760;
+    --accent-gradient: linear-gradient(135deg, #1db954, #1ed760, #23e065);
 
     --glass-bg: rgba(255, 255, 255, 0.7);
     --glass-border: rgba(0, 0, 0, 0.08);

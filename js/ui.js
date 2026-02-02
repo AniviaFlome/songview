@@ -504,6 +504,12 @@ let currentPlayingElement = null;
 let progressInterval = null;
 
 export function playPreview(url, element) {
+    // If no URL, do not activate player
+    if (!url) {
+        console.log('Audio preview not available');
+        return;
+    }
+
     // Stop any existing playback
     if (currentAudio) {
         stopPreview();
@@ -513,32 +519,29 @@ export function playPreview(url, element) {
     currentPlayingElement = element;
     if (element) {
         // Create overlay FIRST, then add playing class to prevent flicker
-        createProgressOverlay(element, !url);
+        createProgressOverlay(element, false);
         element.classList.add('playing');
     }
 
-    // Only create audio if we have a URL
-    if (url) {
-        currentAudio = new Audio(url);
-        currentAudio.volume = 0.5;
+    currentAudio = new Audio(url);
+    currentAudio.volume = 0.5;
 
-        currentAudio.play().catch(() => {
-            // Audio failed to load/play - still show visual
-            console.log('Audio preview not available');
-        });
+    currentAudio.play().catch(() => {
+        // Audio failed to load/play - still show visual
+        console.log('Audio preview playback failed');
+    });
 
-        // Update progress
-        progressInterval = setInterval(() => {
-            if (currentAudio && currentPlayingElement) {
-                const progress = (currentAudio.currentTime / currentAudio.duration) * 100;
-                updateProgress(progress);
-            }
-        }, 50);
+    // Update progress
+    progressInterval = setInterval(() => {
+        if (currentAudio && currentPlayingElement) {
+            const progress = (currentAudio.currentTime / currentAudio.duration) * 100;
+            updateProgress(progress);
+        }
+    }, 50);
 
-        currentAudio.onended = () => {
-            stopPreview();
-        };
-    }
+    currentAudio.onended = () => {
+        stopPreview();
+    };
 }
 
 function createProgressOverlay(element, noAudio = false) {

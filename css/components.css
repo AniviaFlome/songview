@@ -406,7 +406,7 @@
 
 /* Block hover effect right after stopping to prevent flicker */
 .track-art-container.just-stopped .play-overlay {
-    opacity: 0 !important;
+    opacity: 1 !important;
     transition: none;
 }
 

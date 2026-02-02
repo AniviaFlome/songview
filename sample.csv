@@ -1,0 +1,4 @@
+"Track Name","Artist Name(s)","Album Name","Album Image URL","Track Preview URL","Track Duration (ms)","Added At","Popularity"
+"Test Track 1 (With Preview)","Test Artist","Test Album","https://via.placeholder.com/300","https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3","200000","2023-01-01","50"
+"Test Track 2 (No Preview)","Test Artist","Test Album","https://via.placeholder.com/300",,"180000","2023-01-02","40"
+"Test Track 3 (Another)","Artist 2","Album 2","https://via.placeholder.com/300","https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3","240000","2023-01-03","60"
