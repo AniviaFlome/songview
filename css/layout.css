@@ -65,6 +65,12 @@
     z-index: 100;
 }
 
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
 .logo {
     display: flex;
     align-items: center;
@@ -127,14 +133,14 @@
 }
 
 .upload-hero {
-    margin-bottom: 48px;
+    margin-bottom: 32px;
 }
 
 .hero-title {
-    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-size: clamp(1.75rem, 5vw, 4rem);
     font-weight: 800;
     line-height: 1.1;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
 }
 
 .gradient-text {
@@ -145,7 +151,7 @@
 }
 
 .hero-subtitle {
-    font-size: 1.15rem;
+    font-size: 1rem;
     color: var(--text-secondary);
     max-width: 500px;
     margin: 0 auto;
@@ -589,10 +595,6 @@
 
     .search-box {
         min-width: 100%;
-    }
-
-    .toolbar-actions {
-        justify-content: space-between;
     }
 
     .data-table th,

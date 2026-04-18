@@ -1,3 +1,3 @@
-import { init } from './js/main.js';
+import { init } from "./js/main.js";
 
-document.addEventListener('DOMContentLoaded', init);
+document.addEventListener("DOMContentLoaded", init);

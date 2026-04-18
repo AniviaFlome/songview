@@ -11,8 +11,13 @@
     --text-muted: #906060;
 
     --accent-primary: #e17055;
+    --accent-rgb: 225, 112, 85;
     --accent-secondary: #fab1a0;
     --accent-gradient: linear-gradient(135deg, #e17055, #fab1a0);
+    --gradient-1: linear-gradient(135deg, #e17055 0%, #fab1a0 100%);
+    --gradient-2: linear-gradient(135deg, #fd79a8 0%, #e17055 100%);
+    --gradient-3: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
+    --gradient-4: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
 
     --glass-bg: rgba(58, 16, 16, 0.7);
     --glass-border: rgba(255, 232, 224, 0.08);
