@@ -12,9 +12,11 @@ A beautiful, modern web-based viewer for Spotify playlist and osu! beatmap expor
 ## Supported CSV Formats
 
 ### [Exportify](https://github.com/watsonbox/exportify)
+
 Standard Exportify CSV with columns: Track Name, Artist Name(s), Album Name, etc.
 
 ### [osu-beatmap-manager](https://github.com/AniviaFlome/osu-beatmap-manager)
+
 CSV with columns: Collection, Artist, Title, Difficulty, StarRating, BPM, Length, Ruleset, Status, BeatmapID, BeatmapSetID, DownloadLink, PreviewLink
 
 ### Local Development

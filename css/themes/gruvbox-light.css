@@ -1,37 +1,37 @@
 /* Gruvbox Light Theme */
 [data-theme="gruvbox-light"] {
-    --bg-primary: #f2e5bc;
-    --bg-secondary: #ebdbb2;
-    --bg-tertiary: #d5c4a1;
-    --bg-elevated: #fbf1c7;
-    --bg-hover: #bdae93;
+  --bg-primary: #f2e5bc;
+  --bg-secondary: #ebdbb2;
+  --bg-tertiary: #d5c4a1;
+  --bg-elevated: #fbf1c7;
+  --bg-hover: #bdae93;
 
-    --text-primary: #3c3836;
-    --text-secondary: #504945;
-    --text-muted: #665c54;
+  --text-primary: #3c3836;
+  --text-secondary: #504945;
+  --text-muted: #665c54;
 
-    --accent-primary: #d79921;
-    --accent-rgb: 215, 153, 33;
-    --accent-secondary: #b8bb26;
-    --accent-gradient: linear-gradient(135deg, #d79921, #b8bb26);
-    --gradient-1: linear-gradient(135deg, #d79921 0%, #b8bb26 100%);
-    --gradient-2: linear-gradient(135deg, #cc241d 0%, #d65d0e 100%);
-    --gradient-3: linear-gradient(135deg, #076678 0%, #6898a3 100%);
-    --gradient-4: linear-gradient(135deg, #427b58 0%, #98971a 100%);
+  --accent-primary: #d79921;
+  --accent-rgb: 215, 153, 33;
+  --accent-secondary: #b8bb26;
+  --accent-gradient: linear-gradient(135deg, #d79921, #b8bb26);
+  --gradient-1: linear-gradient(135deg, #d79921 0%, #b8bb26 100%);
+  --gradient-2: linear-gradient(135deg, #cc241d 0%, #d65d0e 100%);
+  --gradient-3: linear-gradient(135deg, #076678 0%, #6898a3 100%);
+  --gradient-4: linear-gradient(135deg, #427b58 0%, #98971a 100%);
 
-    --glass-bg: rgba(253, 244, 193, 0.7);
-    --glass-border: rgba(60, 56, 54, 0.08);
-    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --glass-bg: rgba(253, 244, 193, 0.7);
+  --glass-border: rgba(60, 56, 54, 0.08);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
 [data-preview="gruvbox-light"] {
-    background: #fbf1c7;
+  background: #fbf1c7;
 }
 
 [data-preview="gruvbox-light"] .theme-preview-header {
-    background: #ebdbb2;
+  background: #ebdbb2;
 }
 
 [data-preview="gruvbox-light"] .theme-preview-body {
-    background: #d5c4a1;
+  background: #d5c4a1;
 }

@@ -1,37 +1,37 @@
 /* Tokyo Night Storm Theme */
 [data-theme="tokyo-storm"] {
-    --bg-primary: #24283b;
-    --bg-secondary: #1f2335;
-    --bg-tertiary: #414868;
-    --bg-elevated: #414868;
-    --bg-hover: #414868;
+  --bg-primary: #24283b;
+  --bg-secondary: #1f2335;
+  --bg-tertiary: #414868;
+  --bg-elevated: #414868;
+  --bg-hover: #414868;
 
-    --text-primary: #c0caf5;
-    --text-secondary: #a9b1d6;
-    --text-muted: #565f89;
+  --text-primary: #c0caf5;
+  --text-secondary: #a9b1d6;
+  --text-muted: #565f89;
 
-    --accent-primary: #7aa2f7;
-    --accent-rgb: 122, 162, 247;
-    --accent-secondary: #2ac3de;
-    --accent-gradient: linear-gradient(135deg, #7aa2f7, #2ac3de);
-    --gradient-1: linear-gradient(135deg, #7aa2f7 0%, #2ac3de 100%);
-    --gradient-2: linear-gradient(135deg, #f7768e 0%, #ff007c 100%);
-    --gradient-3: linear-gradient(135deg, #bb9af7 0%, #7aa2f7 100%);
-    --gradient-4: linear-gradient(135deg, #9ece6a 0%, #2ac3de 100%);
+  --accent-primary: #7aa2f7;
+  --accent-rgb: 122, 162, 247;
+  --accent-secondary: #2ac3de;
+  --accent-gradient: linear-gradient(135deg, #7aa2f7, #2ac3de);
+  --gradient-1: linear-gradient(135deg, #7aa2f7 0%, #2ac3de 100%);
+  --gradient-2: linear-gradient(135deg, #f7768e 0%, #ff007c 100%);
+  --gradient-3: linear-gradient(135deg, #bb9af7 0%, #7aa2f7 100%);
+  --gradient-4: linear-gradient(135deg, #9ece6a 0%, #2ac3de 100%);
 
-    --glass-bg: rgba(31, 35, 53, 0.7);
-    --glass-border: rgba(192, 202, 245, 0.08);
-    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --glass-bg: rgba(31, 35, 53, 0.7);
+  --glass-border: rgba(192, 202, 245, 0.08);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
 [data-preview="tokyo-storm"] {
-    background: #24283b;
+  background: #24283b;
 }
 
 [data-preview="tokyo-storm"] .theme-preview-header {
-    background: #1f2335;
+  background: #1f2335;
 }
 
 [data-preview="tokyo-storm"] .theme-preview-body {
-    background: #414868;
+  background: #414868;
 }

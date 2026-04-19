@@ -1,11 +1,3 @@
-import { state } from "./state.js";
-import { elements } from "./dom.js";
-import {
-  escapeHtml,
-  formatDuration,
-  formatTrackDuration,
-  parseLengthToSeconds,
-} from "./utils.js";
 import {
   findHeader,
   getDisplayHeaders,
@@ -13,6 +5,14 @@ import {
   handleSort,
   processCSVData,
 } from "./data.js";
+import { elements } from "./dom.js";
+import { state } from "./state.js";
+import {
+  escapeHtml,
+  formatDuration,
+  formatTrackDuration,
+  parseLengthToSeconds,
+} from "./utils.js";
 
 const PLACEHOLDER_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>`;
 
@@ -211,7 +211,9 @@ export function updateStats() {
     state.filteredData.forEach((row) => {
       const artistVal = row[artistKey];
       if (artistVal) {
-        artistVal.split(",").forEach((a) => artists.add(a.trim()));
+        artistVal.split(",").forEach((a) => {
+          artists.add(a.trim());
+        });
       }
     });
     elements.totalArtists.textContent = artists.size.toLocaleString();
@@ -287,7 +289,7 @@ export function updateStats() {
     ]);
     if (durationKey) {
       const totalMs = state.filteredData.reduce((sum, row) => {
-        return sum + (parseInt(row[durationKey]) || 0);
+        return sum + (parseInt(row[durationKey], 10) || 0);
       }, 0);
       elements.totalDuration.textContent = formatDuration(totalMs);
     } else {
@@ -315,7 +317,7 @@ function setupEventDelegation() {
     }
 
     if (tr) {
-      openModal(parseInt(tr.dataset.index));
+      openModal(parseInt(tr.dataset.index, 10));
     }
   });
 
@@ -332,7 +334,7 @@ function setupEventDelegation() {
     }
 
     if (item) {
-      openModal(parseInt(item.dataset.index));
+      openModal(parseInt(item.dataset.index, 10));
     }
   });
 
@@ -494,7 +496,7 @@ function renderTable(append = false) {
             "duration_ms",
           ]);
           if (header === durationKey) {
-            return `<td>${formatTrackDuration(parseInt(row[header]) || 0)}</td>`;
+            return `<td>${formatTrackDuration(parseInt(row[header], 10) || 0)}</td>`;
           }
 
           return `<td>${escapeHtml(row[header] || "")}</td>`;
@@ -608,7 +610,7 @@ function openModal(index) {
     getTrackDisplayInfo(track);
 
   if (state.format === "osu") {
-    const setId = track["BeatmapSetID"];
+    const setId = track.BeatmapSetID;
     const imageUrl = imageSrc;
     const validSetId = setId && setId !== "-1" && setId.trim() !== "";
 
@@ -616,7 +618,7 @@ function openModal(index) {
       ? `<a href="https://osu.ppy.sh/beatmapsets/${escapeHtml(setId)}" target="_blank" class="spotify-redirect-link">${escapeHtml(trackName)}</a>`
       : escapeHtml(trackName);
 
-    const parsedDiffs = parseDifficulties(track["Difficulties"]);
+    const parsedDiffs = parseDifficulties(track.Difficulties);
     const difficulties =
       parsedDiffs.length > 0
         ? parsedDiffs
@@ -632,8 +634,8 @@ function openModal(index) {
 
     const difficultyCount = track["Difficulty Count"] || "0";
 
-    const downloadBtn = track["DownloadLink"]
-      ? `<a href="${escapeHtml(track["DownloadLink"])}" target="_blank" class="spotify-link" style="margin-top: 12px; display: inline-block;">Download <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14" style="margin-left: 4px; vertical-align: middle;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></a>`
+    const downloadBtn = track.DownloadLink
+      ? `<a href="${escapeHtml(track.DownloadLink)}" target="_blank" class="spotify-link" style="margin-top: 12px; display: inline-block;">Download <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14" style="margin-left: 4px; vertical-align: middle;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></a>`
       : "";
 
     const osuLinkBtn = validSetId
@@ -762,7 +764,7 @@ function openModal(index) {
       }
 
       if (key.toLowerCase().includes("duration")) {
-        return formatTrackDuration(parseInt(value) || 0);
+        return formatTrackDuration(parseInt(value, 10) || 0);
       }
 
       if (key.toLowerCase().includes("date")) {

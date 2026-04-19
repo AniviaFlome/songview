@@ -1,0 +1,22 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.1.2/schema.json",
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "complexity": {
+        "recommended": true,
+        "useLiteralKeys": "off"
+      },
+      "style": {
+        "recommended": true,
+        "useTemplate": "off",
+        "noDescendingSpecificity": "off"
+      },
+      "suspicious": {
+        "recommended": true,
+        "noDocumentCookie": "off"
+      }
+    }
+  }
+}

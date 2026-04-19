@@ -1,5 +1,5 @@
 import { state } from "./state.js";
-import { renderData, updateStats, showViewer } from "./ui.js";
+import { renderData, showViewer, updateStats } from "./ui.js";
 import { parseCSVLine, parseLengthToSeconds } from "./utils.js";
 
 function isOsuKeys(keys) {
@@ -24,36 +24,36 @@ function transformOsuData(rawRows) {
   const hasStarRating = headers.includes("StarRating");
 
   for (const row of rawRows) {
-    const setId = row["BeatmapSetID"];
+    const setId = row.BeatmapSetID;
     const key =
       setId && setId !== "-1" && setId.trim() !== ""
         ? setId
-        : `${row["Artist"]}||${row["Title"]}`;
+        : `${row.Artist}||${row.Title}`;
 
     if (!groups[key]) {
       groups[key] = {
-        title: row["Title"],
-        artist: row["Artist"],
+        title: row.Title,
+        artist: row.Artist,
         setId: setId,
-        downloadLink: row["DownloadLink"] || "",
-        previewLink: row["PreviewLink"] || "",
-        bpm: row["BPM"] || "",
-        length: row["Length"] || "",
-        ruleset: row["Ruleset"] || "",
-        status: row["Status"] || "",
+        downloadLink: row.DownloadLink || "",
+        previewLink: row.PreviewLink || "",
+        bpm: row.BPM || "",
+        length: row.Length || "",
+        ruleset: row.Ruleset || "",
+        status: row.Status || "",
         collections: new Set(),
         difficulties: [],
         starRatings: [],
       };
     }
 
-    if (row["Collection"] && row["Collection"].trim()) {
-      groups[key].collections.add(row["Collection"]);
+    if (row.Collection?.trim()) {
+      groups[key].collections.add(row.Collection);
     }
-    if (row["Difficulty"] && row["Difficulty"].trim()) {
-      groups[key].difficulties.push(row["Difficulty"]);
-      if (hasStarRating && row["StarRating"]) {
-        groups[key].starRatings.push(parseFloat(row["StarRating"]) || 0);
+    if (row.Difficulty?.trim()) {
+      groups[key].difficulties.push(row.Difficulty);
+      if (hasStarRating && row.StarRating) {
+        groups[key].starRatings.push(parseFloat(row.StarRating) || 0);
       } else {
         groups[key].starRatings.push(0);
       }
@@ -186,12 +186,12 @@ export function handleSort(column) {
       column.toLowerCase() === "bpm" ||
       column.toLowerCase() === "_index"
     ) {
-      valA = parseInt(valA);
-      valB = parseInt(valB);
+      valA = parseInt(valA, 10);
+      valB = parseInt(valB, 10);
 
       // Handle NaN (treat as 0)
-      if (isNaN(valA)) valA = 0;
-      if (isNaN(valB)) valB = 0;
+      if (Number.isNaN(valA)) valA = 0;
+      if (Number.isNaN(valB)) valB = 0;
     } else if (column.toLowerCase() === "length") {
       valA = parseLengthToSeconds(valA);
       valB = parseLengthToSeconds(valB);

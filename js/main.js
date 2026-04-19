@@ -1,27 +1,26 @@
-import { state } from "./state.js";
-import { elements, setupParticles } from "./dom.js";
-import { loadTheme, renderThemeGrid } from "./themes.js";
+import { getSharedData, shareData } from "./api.js";
 import {
-  parseCSV,
+  detectDataFormat,
   handleSearch,
   handleSort,
-  detectDataFormat,
+  parseCSV,
 } from "./data.js";
-import { debounce } from "./utils.js";
+import { elements, setupParticles } from "./dom.js";
+import { state } from "./state.js";
+import { loadTheme, renderThemeGrid } from "./themes.js";
 import {
-  showViewer,
   changePage,
-  switchView,
   closeModal,
-  showSettings,
-  hideSettings,
-  toggleSettings,
-  renderData,
-  toggleInfiniteScroll,
-  showShareModal,
   closeShareModal,
+  hideSettings,
+  renderData,
+  showShareModal,
+  showViewer,
+  switchView,
+  toggleInfiniteScroll,
+  toggleSettings,
 } from "./ui.js";
-import { shareData, getSharedData } from "./api.js";
+import { debounce } from "./utils.js";
 
 export async function init() {
   setupEventListeners();
@@ -52,7 +51,7 @@ export async function init() {
     try {
       // Show loading state if needed, or just let it load
       const result = await getSharedData(id);
-      if (result && result.data && Array.isArray(result.data)) {
+      if (result?.data && Array.isArray(result.data)) {
         state.data = result.data;
         state.filteredData = [...state.data];
         // Extract headers from first row keys
@@ -91,9 +90,12 @@ function setupEventListeners() {
     state.filteredData.sort((a, b) => {
       let valA = a[savedSort] || "";
       let valB = b[savedSort] || "";
-      if (parseInt(valA) == valA && parseInt(valB) == valB) {
-        valA = parseInt(valA);
-        valB = parseInt(valB);
+      if (
+        parseInt(valA, 10) === Number(valA) &&
+        parseInt(valB, 10) === Number(valB)
+      ) {
+        valA = parseInt(valA, 10);
+        valB = parseInt(valB, 10);
       } else {
         valA = String(valA).toLowerCase();
         valB = String(valB).toLowerCase();
@@ -105,7 +107,7 @@ function setupEventListeners() {
   }
 
   // Restore page
-  const savedPage = parseInt(params.get("page"));
+  const savedPage = parseInt(params.get("page"), 10);
   if (savedPage && savedPage > 1) {
     state.currentPage = savedPage;
     renderData();
@@ -160,9 +162,7 @@ function setupEventListeners() {
   // Sort direction button
   if (elements.sortDirBtn) {
     elements.sortDirBtn.addEventListener("click", () => {
-      const col =
-        state.sortColumn ||
-        (elements.sortDropdown && elements.sortDropdown.value);
+      const col = state.sortColumn || elements.sortDropdown?.value;
       if (col) {
         handleSort(col);
       }
@@ -196,7 +196,7 @@ function setupEventListeners() {
 
       try {
         const result = await shareData(state.data);
-        if (result && result.id) {
+        if (result?.id) {
           const url = `${window.location.origin}${window.location.pathname}?id=${result.id}`;
           showShareModal(url);
         }
@@ -261,7 +261,7 @@ function handleDrop(e) {
   elements.dropzone.classList.remove("dragover");
 
   const file = e.dataTransfer.files[0];
-  if (file && file.name.endsWith(".csv")) {
+  if (file?.name.endsWith(".csv")) {
     parseCSV(file);
   }
 }

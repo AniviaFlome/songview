@@ -4,7 +4,7 @@ export async function onRequestPost(context) {
     const body = await request.json();
 
     // Basic validation
-    if (!body || !body.data) {
+    if (!body?.data) {
       return new Response(JSON.stringify({ error: "Missing data" }), {
         status: 400,
         headers: { "Content-Type": "application/json" },

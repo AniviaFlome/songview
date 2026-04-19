@@ -70,7 +70,7 @@ export function parseLengthToSeconds(v) {
   if (!v || typeof v !== "string") return 0;
   const parts = v.split(":");
   if (parts.length === 2) {
-    return (parseInt(parts[0]) || 0) * 60 + (parseInt(parts[1]) || 0);
+    return (parseInt(parts[0], 10) || 0) * 60 + (parseInt(parts[1], 10) || 0);
   }
-  return parseInt(v) || 0;
+  return parseInt(v, 10) || 0;
 }
