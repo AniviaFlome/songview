@@ -1,5 +1,6 @@
 import { getSharedData, shareData } from "./api.js";
 import {
+  applyFilters,
   detectDataFormat,
   handleSearch,
   handleSort,
@@ -19,6 +20,7 @@ import {
   switchView,
   toggleInfiniteScroll,
   toggleSettings,
+  updateStats,
 } from "./ui.js";
 import { debounce } from "./utils.js";
 
@@ -31,12 +33,10 @@ export async function init() {
   // Listen for sort events and re-render
   window.addEventListener("dataSorted", () => {
     state.currentPage = 1;
+    updateStats();
     renderData();
     if (elements.sortDropdown && state.sortColumn) {
       elements.sortDropdown.value = state.sortColumn;
-      const placeholder =
-        elements.sortDropdown.querySelector('option[value=""]');
-      if (placeholder) placeholder.remove();
     }
     if (elements.sortDirBtn) {
       elements.sortDirBtn.querySelector("svg").style.transform =
@@ -128,9 +128,6 @@ function setupEventListeners() {
   if (elements.settingsBtn) {
     elements.settingsBtn.addEventListener("click", toggleSettings);
   }
-  if (elements.settingsBackBtn) {
-    elements.settingsBackBtn.addEventListener("click", hideSettings);
-  }
 
   // Search
   if (elements.searchInput) {
@@ -166,6 +163,22 @@ function setupEventListeners() {
       if (col) {
         handleSort(col);
       }
+    });
+  }
+
+  // Mode filter (osu! only)
+  if (elements.modeFilter) {
+    elements.modeFilter.addEventListener("change", () => {
+      state.modeFilter = elements.modeFilter.value;
+      applyFilters();
+    });
+  }
+
+  // Status filter (osu! only)
+  if (elements.statusFilter) {
+    elements.statusFilter.addEventListener("change", () => {
+      state.statusFilter = elements.statusFilter.value;
+      applyFilters();
     });
   }
 
@@ -223,7 +236,6 @@ function setupEventListeners() {
         await navigator.clipboard.writeText(elements.shareUrlInput.value);
       } catch {
         elements.shareUrlInput.select();
-        document.execCommand("copy");
       }
 
       const originalHTML = elements.copyShareBtn.innerHTML;

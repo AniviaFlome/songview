@@ -3,13 +3,13 @@ import {
   getDisplayHeaders,
   getDisplayName,
   handleSort,
-  processCSVData,
 } from "./data.js";
 import { elements } from "./dom.js";
 import { state } from "./state.js";
 import {
   escapeHtml,
   formatDuration,
+  formatSecondsDuration,
   formatTrackDuration,
   parseLengthToSeconds,
 } from "./utils.js";
@@ -126,6 +126,17 @@ export function showViewer() {
   elements.uploadSection.classList.add("hidden");
   elements.viewerSection.classList.remove("hidden");
 
+  if (state.format === "osu" && !state.sortColumn) {
+    state.sortColumn = "_index";
+    state.sortDirection = "desc";
+  } else if (!state.sortColumn) {
+    const addedAt = state.headers.find((h) => h.toLowerCase() === "added at");
+    if (addedAt) {
+      state.sortColumn = addedAt;
+      state.sortDirection = "desc";
+    }
+  }
+
   updateSortDropdown();
   updateStats();
   renderData();
@@ -135,8 +146,7 @@ function updateSortDropdown() {
   const dropdown = elements.sortDropdown;
   if (!dropdown) return;
 
-  dropdown.innerHTML =
-    '<option value="" disabled selected hidden>Sort by...</option>';
+  dropdown.innerHTML = "";
 
   const options =
     state.format === "osu"
@@ -146,11 +156,12 @@ function updateSortDropdown() {
           ["Artist", "Artist"],
           ["BPM", "BPM"],
           ["Length", "Length"],
+          ["Status", "Status"],
         ]
       : [
-          ["Popularity", "Popularity"],
-          ["Track Duration (ms)", "Duration"],
           ["Added At", "Recently Added"],
+          ["Popularity", "Popularity"],
+          ["Track Duration (ms)", "Length"],
           ["Album Name", "Album"],
           ["Track Name", "Track Name"],
         ];
@@ -163,16 +174,69 @@ function updateSortDropdown() {
       dropdown.appendChild(option);
     }
   });
+
+  // Mode & status filters (osu! only)
+  const modeFilter = elements.modeFilter;
+  const statusFilter = elements.statusFilter;
+
+  if (state.format === "osu") {
+    if (modeFilter) {
+      modeFilter.hidden = false;
+      modeFilter.innerHTML =
+        '<option value="">Mode</option>' +
+        ["osu!", "osu!taiko", "osu!catch", "osu!mania"]
+          .map((m) => `<option value="${m}">${m}</option>`)
+          .join("");
+      modeFilter.value = state.modeFilter;
+    }
+    if (statusFilter) {
+      statusFilter.hidden = false;
+      statusFilter.innerHTML =
+        '<option value="">Status</option>' +
+        [
+          "Ranked",
+          "Loved",
+          "Approved",
+          "Qualified",
+          "Pending",
+          "WIP",
+          "Graveyard",
+        ]
+          .map((s) => `<option value="${s}">${s}</option>`)
+          .join("");
+      statusFilter.value = state.statusFilter;
+    }
+  } else {
+    if (modeFilter) modeFilter.hidden = true;
+    if (statusFilter) statusFilter.hidden = true;
+  }
+
+  if (state.sortColumn) {
+    dropdown.value = state.sortColumn;
+  }
 }
 
-export function resetApp() {
+function resetApp() {
   state.data = [];
   state.filteredData = [];
   state.headers = [];
   state.currentPage = 1;
   state.searchQuery = "";
+  state.sortColumn = null;
+  state.sortDirection = "desc";
   state.format = "spotify";
+  state.modeFilter = "";
+  state.statusFilter = "";
   elements.searchInput.value = "";
+
+  if (elements.modeFilter) {
+    elements.modeFilter.hidden = true;
+    elements.modeFilter.value = "";
+  }
+  if (elements.statusFilter) {
+    elements.statusFilter.hidden = true;
+    elements.statusFilter.value = "";
+  }
 
   elements.viewerSection.classList.add("hidden");
   elements.uploadSection.classList.remove("hidden");
@@ -250,21 +314,7 @@ export function updateStats() {
       const totalSecs = state.filteredData.reduce((sum, row) => {
         return sum + parseLengthToSeconds(row[lengthKey]);
       }, 0);
-      if (totalSecs >= 86400) {
-        const days = Math.floor(totalSecs / 86400);
-        const hrs = Math.floor((totalSecs % 86400) / 3600);
-        elements.totalDuration.textContent =
-          hrs > 0 ? `${days}d ${hrs}h` : `${days}d`;
-      } else if (totalSecs >= 3600) {
-        const hrs = Math.floor(totalSecs / 3600);
-        const mins = Math.floor((totalSecs % 3600) / 60);
-        elements.totalDuration.textContent = `${hrs}h ${mins}m`;
-      } else {
-        const mins = Math.floor(totalSecs / 60);
-        const secs = totalSecs % 60;
-        elements.totalDuration.textContent =
-          mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
-      }
+      elements.totalDuration.textContent = formatSecondsDuration(totalSecs);
     } else {
       elements.totalDuration.textContent = "\u2014";
     }
@@ -619,6 +669,7 @@ function openModal(index) {
       : escapeHtml(trackName);
 
     const parsedDiffs = parseDifficulties(track.Difficulties);
+    parsedDiffs.sort((a, b) => (a.stars ?? 0) - (b.stars ?? 0));
     const difficulties =
       parsedDiffs.length > 0
         ? parsedDiffs
@@ -651,15 +702,9 @@ function openModal(index) {
       "ImageURL",
       "PreviewURL",
       "PreviewLink",
+      "BeatmapSetID",
       "_index",
     ];
-
-    const formatOsuValue = (key, value) => {
-      if (key === "BeatmapSetID" && value && value !== "-1") {
-        return `<a href="https://osu.ppy.sh/beatmapsets/${escapeHtml(value)}" target="_blank" class="spotify-link">View on osu! <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a>`;
-      }
-      return escapeHtml(String(value));
-    };
 
     const details = Object.entries(track)
       .filter(
@@ -673,7 +718,7 @@ function openModal(index) {
         ([key, value]) => `
                 <div class="detail-item">
                     <div class="detail-label">${escapeHtml(key)}</div>
-                    <div class="detail-value">${formatOsuValue(key, value)}</div>
+                    <div class="detail-value">${escapeHtml(String(value))}</div>
                 </div>
             `,
       )
@@ -695,7 +740,7 @@ function openModal(index) {
                     <h2 class="modal-title">${titleLink}</h2>
                     <p class="modal-subtitle">${escapeHtml(artistName)}</p>
                     <p class="modal-meta">${escapeHtml(difficultyCount)} difficult${escapeHtml(difficultyCount) === "1" ? "y" : "ies"}</p>
-                    ${difficulties ? `<div class="modal-difficulties" style="margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px;">${difficulties}</div>` : ""}
+                    ${difficulties ? `<div class="modal-difficulties">${difficulties}</div>` : ""}
                     ${downloadBtn}
                     ${osuLinkBtn}
                     ${audioHtml}
@@ -882,7 +927,7 @@ let currentAudio = null;
 let currentPlayingElement = null;
 let progressInterval = null;
 
-export function playPreview(url, element) {
+function playPreview(url, element) {
   // If no URL, do not activate player
   if (!url) {
     console.log("Audio preview not available");
@@ -898,7 +943,7 @@ export function playPreview(url, element) {
   currentPlayingElement = element;
   if (element) {
     // Create overlay FIRST, then add playing class to prevent flicker
-    createProgressOverlay(element, false);
+    createProgressOverlay(element);
     element.classList.add("playing");
   }
 
@@ -923,27 +968,23 @@ export function playPreview(url, element) {
   };
 }
 
-function createProgressOverlay(element, noAudio = false) {
-  // Remove existing overlay
+function createProgressOverlay(element) {
   const existing = element.querySelector(".audio-progress-overlay");
   if (existing) existing.remove();
 
-  const circumference = 2 * Math.PI * 18; // r=18
+  const circumference = 2 * Math.PI * 18;
 
   const overlay = document.createElement("div");
   overlay.className = "audio-progress-overlay";
 
-  // Show different icon based on whether audio is available
-  const icon = noAudio
-    ? `<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>` // Play icon (no audio available)
-    : `<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>`; // Pause icon
+  const icon = `<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>`;
 
   overlay.innerHTML = `
         <svg class="progress-ring" viewBox="0 0 44 44">
             <circle class="progress-ring-bg" cx="22" cy="22" r="18" fill="none" stroke-width="3"
                     style="stroke-dasharray: ${circumference}; stroke-dashoffset: 0"/>
             <circle class="progress-ring-fill" cx="22" cy="22" r="18" fill="none" stroke-width="3"
-                    style="stroke-dasharray: ${circumference}; stroke-dashoffset: ${noAudio ? 0 : circumference}"/>
+                    style="stroke-dasharray: ${circumference}; stroke-dashoffset: ${circumference}"/>
         </svg>
         <div class="pause-icon">${icon}</div>
     `;
@@ -965,7 +1006,7 @@ function updateProgress(percent) {
   }
 }
 
-export function stopPreview() {
+function stopPreview() {
   if (currentAudio) {
     currentAudio.pause();
     currentAudio = null;
@@ -997,30 +1038,29 @@ export function stopPreview() {
 }
 
 // Settings Views
-export function showSettings() {
+function showSettings() {
   elements.uploadSection.classList.add("hidden");
   elements.viewerSection.classList.add("hidden");
   elements.settingsSection.classList.remove("hidden");
+  elements.settingsBtn?.classList.add("settings-active");
 }
 
 export function hideSettings() {
-  // Add closing animation
   elements.settingsSection.classList.add("closing");
 
-  // Wait for animation to complete before hiding
   setTimeout(() => {
     elements.settingsSection.classList.remove("closing");
     elements.settingsSection.classList.add("hidden");
+    elements.settingsBtn?.classList.remove("settings-active");
     if (state.data.length > 0) {
       elements.viewerSection.classList.remove("hidden");
     } else {
       elements.uploadSection.classList.remove("hidden");
     }
-  }, 200); // Match animation duration
+  }, 200);
 }
 
 export function toggleSettings() {
-  // Don't toggle if closing animation is in progress
   if (elements.settingsSection.classList.contains("closing")) {
     return;
   }

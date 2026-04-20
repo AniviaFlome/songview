@@ -10,4 +10,6 @@ export const state = {
   searchQuery: "",
   infiniteScroll: false,
   format: "spotify",
+  modeFilter: "",
+  statusFilter: "",
 };

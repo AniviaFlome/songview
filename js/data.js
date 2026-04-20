@@ -18,6 +18,26 @@ export function detectDataFormat(data) {
   return isOsuKeys(Object.keys(data[0])) ? "osu" : "spotify";
 }
 
+const RULESET_MAP = {
+  osu: "osu!",
+  taiko: "osu!taiko",
+  fruits: "osu!catch",
+  mania: "osu!mania",
+};
+
+function normalizeRuleset(val) {
+  if (!val) return "";
+  const lower = String(val).toLowerCase().trim();
+  return RULESET_MAP[lower] || val;
+}
+
+function normalizeStatus(val) {
+  if (!val) return "";
+  return String(val)
+    .trim()
+    .replace(/^./, (c) => c.toUpperCase());
+}
+
 function transformOsuData(rawRows) {
   const groups = {};
   const headers = Object.keys(rawRows[0] || {});
@@ -82,8 +102,8 @@ function transformOsuData(rawRows) {
       DownloadLink: group.downloadLink,
       BPM: group.bpm,
       Length: group.length,
-      Ruleset: group.ruleset,
-      Status: group.status,
+      Ruleset: normalizeRuleset(group.ruleset),
+      Status: normalizeStatus(group.status),
       ImageURL: gSetId ? `https://b.ppy.sh/thumb/${gSetId}l.jpg` : "",
       PreviewURL: previewUrl,
       _index: index,
@@ -142,20 +162,29 @@ export function parseCSV(file) {
 
 export function handleSearch(e) {
   state.searchQuery = e.target.value.toLowerCase();
+  applyFilters();
+}
+
+export function applyFilters() {
   state.currentPage = 1;
 
-  if (!state.searchQuery) {
-    state.filteredData = [...state.data];
-  } else {
-    state.filteredData = state.data.filter((row) => {
+  state.filteredData = state.data.filter((row) => {
+    if (state.modeFilter && row.Ruleset !== state.modeFilter) return false;
+    if (state.statusFilter && row.Status !== state.statusFilter) return false;
+    if (state.searchQuery) {
       return Object.values(row).some((value) =>
         String(value).toLowerCase().includes(state.searchQuery),
       );
-    });
-  }
+    }
+    return true;
+  });
 
-  updateStats();
-  renderData();
+  if (state.sortColumn) {
+    handleSort(state.sortColumn);
+  } else {
+    updateStats();
+    renderData();
+  }
 }
 
 export function handleSort(column) {

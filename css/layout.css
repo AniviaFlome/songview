@@ -78,6 +78,10 @@
   gap: 8px;
 }
 
+.nav .settings-btn {
+  margin-left: 12px;
+}
+
 .logo {
   display: flex;
   align-items: center;
@@ -328,8 +332,6 @@
 }
 
 .track-art {
-  width: 48px;
-  height: 48px;
   border-radius: 6px;
   background: var(--bg-tertiary);
   object-fit: cover;
@@ -337,8 +339,6 @@
 }
 
 .track-art-placeholder {
-  width: 48px;
-  height: 48px;
   border-radius: 6px;
   background: var(--gradient-1);
   display: flex;
@@ -373,19 +373,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.explicit-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2px 5px;
-  background: var(--text-muted);
-  color: var(--bg-primary);
-  font-size: 0.65rem;
-  font-weight: 700;
-  border-radius: 3px;
-  margin-left: 8px;
 }
 
 /* ===== Grid View ===== */
@@ -467,6 +454,13 @@
   max-width: 800px;
   margin: 0 auto;
   animation: fadeIn 0.2s ease;
+}
+
+/* Settings button active state */
+.nav-btn.settings-active {
+  background: var(--accent-primary);
+  color: white;
+  border-color: var(--accent-primary);
 }
 
 .settings-section.closing {
